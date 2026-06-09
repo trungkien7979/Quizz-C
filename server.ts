@@ -15,22 +15,35 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// CORS middleware - allow all origins for production compatibility
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // Lazy-loaded Gemini clients
 let aiClient: GoogleGenAI | null = null;
 
 function getGeminiClient(): GoogleGenAI {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("GEMINI_API_KEY environment variable is missing in secrets.");
+    throw new Error(
+      "GEMINI_API_KEY environment variable is missing in secrets.",
+    );
   }
   if (!aiClient) {
     aiClient = new GoogleGenAI({
       apiKey: apiKey,
       httpOptions: {
         headers: {
-          'User-Agent': 'aistudio-build',
-        }
-      }
+          "User-Agent": "aistudio-build",
+        },
+      },
     });
   }
   return aiClient;
@@ -39,10 +52,13 @@ function getGeminiClient(): GoogleGenAI {
 // API endpoint to get AI-powered detailed explanation for a given question
 app.post("/api/ai-explain", async (req, res): Promise<any> => {
   try {
-    const { question, codeSnippet, selectedOption, correctAnswer, isCorrect } = req.body;
+    const { question, codeSnippet, selectedOption, correctAnswer, isCorrect } =
+      req.body;
 
     if (!question) {
-      return res.status(400).json({ error: "Tham số câu hỏi (question) là bắt buộc." });
+      return res
+        .status(400)
+        .json({ error: "Tham số câu hỏi (question) là bắt buộc." });
     }
 
     try {
@@ -59,8 +75,12 @@ ${codeSnippet ? `ĐOẠN CODE C++ LIÊN QUAN:\n\`\`\`cpp\n${codeSnippet}\n\`\`\`
 
 Đáp án đúng của câu này là: ${correctAnswer}
 
-${selectedOption ? `Sinh viên đã chọn phương án: ${selectedOption}.
-Trạng thái lựa chọn: ${isCorrect ? "Đúng chính xác!" : "Chưa chính xác (Sai)."}` : "Sinh viên muốn xem giải thích chi tiết."}
+${
+  selectedOption
+    ? `Sinh viên đã chọn phương án: ${selectedOption}.
+Trạng thái lựa chọn: ${isCorrect ? "Đúng chính xác!" : "Chưa chính xác (Sai)."}`
+    : "Sinh viên muốn xem giải thích chi tiết."
+}
 
 Nhiệm vụ của bạn:
 1. Giải thích nghĩa của các lớp, khái niệm OOP được hỏi trong câu (Ví dụ: tính đóng gói, tính đa hình, hàm ảo, hàm hủy ảo, copy constructor, thứ tự constructor...).
@@ -70,12 +90,12 @@ Nhiệm vụ của bạn:
 
       const response = await ai.models.generateContent({
         model: "gemini-3.5-flash",
-        contents: prompt
+        contents: prompt,
       });
 
-      const explanationMarkdown = response.text || "Không thể khởi tạo nội dung giải thích.";
+      const explanationMarkdown =
+        response.text || "Không thể khởi tạo nội dung giải thích.";
       return res.json({ explanation: explanationMarkdown });
-
     } catch (apiError: any) {
       console.error("Gemini API Error:", apiError);
       // Fallback response with beautiful static explanation if API is missing or fails
@@ -87,13 +107,14 @@ Nhiệm vụ của bạn:
 * **Phân tích thuộc tính**: Những khía cạnh quan trọng của C++ bao gồm quản lý bộ nhớ, quyền truy cập dữ liệu (\`public\`, \`private\`, \`protected\`), dòng chảy của phương thức thiết lập (Constructor) chạy từ lớp cha xuống lớp con trong khi phương thức hủy (Destructor) thu hồi ngược lại để tối ưu hóa bộ nhớ RAM.
 * **Gợi ý học tập**: Để ghi nhớ lâu, hãy thực hành viết lại đoạn code này trên IDE C++ (như Visual Studio Code hoặc CLion), chạy kiểm thử sự khác biệt khi thay đổi các từ khóa quyền truy cập dữ liệu để quan sát lỗi biên dịch.`,
         isFallback: true,
-        errorDetail: apiError.message
+        errorDetail: apiError.message,
       });
     }
-
   } catch (error: any) {
     console.error("Server Route Error:", error);
-    return res.status(500).json({ error: error.message || "Lỗi máy chủ không xác định." });
+    return res
+      .status(500)
+      .json({ error: error.message || "Lỗi máy chủ không xác định." });
   }
 });
 
