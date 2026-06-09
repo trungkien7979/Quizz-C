@@ -133,7 +133,11 @@ export default function PracticePanel({
     setAiExplanation("");
 
     try {
-      const response = await fetch("/api/ai-explain", {
+      // Support both relative path and custom API endpoint via env variable
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+      const apiUrl = `${apiBaseUrl}/api/ai-explain`;
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -144,6 +148,21 @@ export default function PracticePanel({
           isCorrect: isCorrect,
         }),
       });
+
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType?.includes("application/json")) {
+        const text = await response.text();
+        console.error("Invalid Content-Type:", {
+          contentType,
+          status: response.status,
+          responseText: text.substring(0, 200),
+        });
+        setAiExplanation(
+          `⚠️ API trả về lỗi (${response.status})\n\nCó thể do:\n1. Backend chưa được deploy hoặc không accessible\n2. URL API không đúng: ${apiUrl}\n3. Hãy kiểm tra VITE_API_BASE_URL environment variable\n\n💡 Nếu backend ở domain khác, set VITE_API_BASE_URL=https://your-backend.com`,
+        );
+        return;
+      }
 
       const data = await response.json();
       if (response.ok) {
@@ -161,7 +180,7 @@ export default function PracticePanel({
     } catch (err: any) {
       console.error("Network/Fetch Error:", err);
       setAiExplanation(
-        `⚠️ Gặp lỗi đường truyền mạng: ${err.message}\n\nCó thể do:\n1. Kết nối mạng bị gián đoạn\n2. API endpoint /api/ai-explain không accessible\n3. CORS bị chặn\n\n📝 Chi tiết: ${err.message}`,
+        `⚠️ Gặp lỗi đường truyền mạng: ${err.message}\n\nCó thể do:\n1. Kết nối mạng bị gián đoạn\n2. API endpoint không accessible\n3. CORS bị chặn\n\n📝 Chi tiết: ${err.message}`,
       );
     } finally {
       setAiLoading(false);
