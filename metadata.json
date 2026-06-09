@@ -1,0 +1,6 @@
+{
+  "name": "Trắc Nghiệm LTHDT C++",
+  "description": "Hệ thống trắc nghiệm Lập trình Hướng đối tượng C++ với tính năng giải thích chi tiết, tự động chấm điểm và tự động lặp lại câu sai.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
