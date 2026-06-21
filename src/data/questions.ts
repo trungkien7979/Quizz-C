@@ -12,6 +12,8 @@ import { BATCH5_QUESTIONS } from "./questions_batch5";
 import { BATCH6_QUESTIONS } from "./questions_batch6";
 import { BATCH7_QUESTIONS } from "./questions_batch7";
 import { BATCH8_QUESTIONS } from "./questions_batch8";
+import { BATCH9_QUESTIONS } from "./questions_batch9";
+import { BATCH10_QUESTIONS } from "./questions_batch10";
 
 // Consolidate all batches into a single pool of 200 questions
 export const QUESTION_POOL: Question[] = [
@@ -22,7 +24,9 @@ export const QUESTION_POOL: Question[] = [
   ...BATCH5_QUESTIONS,
   ...BATCH6_QUESTIONS,
   ...BATCH7_QUESTIONS,
-  ...BATCH8_QUESTIONS
+  ...BATCH8_QUESTIONS,
+  ...BATCH9_QUESTIONS,
+  ...BATCH10_QUESTIONS,
 ];
 
 // Helper to get questions for a specific batch (25 questions each)
@@ -35,5 +39,7 @@ export function getQuestionsByBatch(batchNo: number): Question[] {
   if (batchNo === 6) return BATCH6_QUESTIONS;
   if (batchNo === 7) return BATCH7_QUESTIONS;
   if (batchNo === 8) return BATCH8_QUESTIONS;
+  if (batchNo === 9) return BATCH9_QUESTIONS;
+  if (batchNo === 10) return BATCH10_QUESTIONS;
   return BATCH1_QUESTIONS;
 }

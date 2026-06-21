@@ -6,10 +6,24 @@
 import { useState, useEffect, useRef } from "react";
 import { Question, UserStats } from "../types";
 import CppCodeBlock from "./CppCodeBlock";
-import { 
-  Award, Clock, ArrowLeft, ArrowRight, CheckCircle2, XCircle, 
-  RefreshCw, AlertTriangle, HelpCircle, Save, BookOpen, Layers, 
-  Flame, ShieldAlert, Check, ChevronRight, HelpCircle as HelpIcon
+import {
+  Award,
+  Clock,
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  XCircle,
+  RefreshCw,
+  AlertTriangle,
+  HelpCircle,
+  Save,
+  BookOpen,
+  Layers,
+  Flame,
+  ShieldAlert,
+  Check,
+  ChevronRight,
+  HelpCircle as HelpIcon,
 } from "lucide-react";
 
 interface TestModePanelProps {
@@ -27,14 +41,16 @@ export default function TestModePanel({
 }: TestModePanelProps) {
   // Test selection states
   const [selectedBatch, setSelectedBatch] = useState<number | null>(null); // null = landing, 1..4 = Batch 1..4, 0 = Random 10
-  
+
   // Active test states
   const [testQuestions, setTestQuestions] = useState<Question[]>([]);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
-  const [userAnswers, setUserAnswers] = useState<Record<string, "A" | "B" | "C" | "D">>({});
+  const [userAnswers, setUserAnswers] = useState<
+    Record<string, "A" | "B" | "C" | "D">
+  >({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
-  
+
   // Timer state
   const [timeLeft, setTimeLeft] = useState<number>(2400); // Default 40 minutes for 25 questions
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,7 +75,7 @@ export default function TestModePanel({
     }
 
     timerRef.current = setInterval(() => {
-      setTimeLeft(prev => prev - 1);
+      setTimeLeft((prev) => prev - 1);
     }, 1000);
 
     return () => {
@@ -90,11 +106,14 @@ export default function TestModePanel({
     setTimeLeft(timeDuration);
   };
 
-  const handleSelectOption = (questionId: string, optionKey: "A" | "B" | "C" | "D") => {
+  const handleSelectOption = (
+    questionId: string,
+    optionKey: "A" | "B" | "C" | "D",
+  ) => {
     if (isSubmitted) return;
-    setUserAnswers(prev => ({
+    setUserAnswers((prev) => ({
       ...prev,
-      [questionId]: optionKey
+      [questionId]: optionKey,
     }));
   };
 
@@ -104,10 +123,11 @@ export default function TestModePanel({
   };
 
   const handleSubmit = () => {
-    const unansweredCount = testQuestions.length - Object.keys(userAnswers).length;
+    const unansweredCount =
+      testQuestions.length - Object.keys(userAnswers).length;
     if (unansweredCount > 0 && !isSubmitted) {
       const confirmSubmit = window.confirm(
-        `Bạn vẫn còn ${unansweredCount} câu hỏi chưa trả lời. Bạn có chắc chắn muốn nộp bài thi ngay bây giờ không?`
+        `Bạn vẫn còn ${unansweredCount} câu hỏi chưa trả lời. Bạn có chắc chắn muốn nộp bài thi ngay bây giờ không?`,
       );
       if (!confirmSubmit) return;
     }
@@ -137,7 +157,7 @@ export default function TestModePanel({
       completedQuizzes: totalNewQuizzes,
       incorrectQuestionIds: newIncorrectQuestionIds,
       totalAttempts: stats.totalAttempts + testQuestions.length,
-      correctAttempts: stats.correctAttempts + correctCount
+      correctAttempts: stats.correctAttempts + correctCount,
     };
     onUpdateStats(updatedStats);
   };
@@ -150,20 +170,20 @@ export default function TestModePanel({
 
   const handleNext = () => {
     if (currentIdx < testQuestions.length - 1) {
-      setCurrentIdx(p => p + 1);
+      setCurrentIdx((p) => p + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentIdx > 0) {
-      setCurrentIdx(p => p - 1);
+      setCurrentIdx((p) => p - 1);
     }
   };
 
   const handleExitTest = () => {
     if (!isSubmitted) {
       const confirmExit = window.confirm(
-        "Bạn đang làm dở bài thi thử. Thiết lập thoát sẽ hủy toàn bộ tiến trình thi hiện tại và không được tính điểm. Bạn chắc chắn chứ?"
+        "Bạn đang làm dở bài thi thử. Thiết lập thoát sẽ hủy toàn bộ tiến trình thi hiện tại và không được tính điểm. Bạn chắc chắn chứ?",
       );
       if (!confirmExit) return;
     }
@@ -178,9 +198,14 @@ export default function TestModePanel({
       desc: "Trọng tâm về cấu trúc Class, Object, Constructor/Destructor căn bản và nguyên lý Encapsulation.",
       count: 25,
       duration: "40 phút",
-      topics: ["Cú pháp khai báo Class", "Quyền private/public mặc định", "Default Constructor", "Sử dụng Destructor"],
+      topics: [
+        "Cú pháp khai báo Class",
+        "Quyền private/public mặc định",
+        "Default Constructor",
+        "Sử dụng Destructor",
+      ],
       color: "from-sky-500 to-blue-600",
-      bgLight: "bg-sky-50/40 text-sky-700 border-sky-100"
+      bgLight: "bg-sky-50/40 text-sky-700 border-sky-100",
     },
     {
       id: 2,
@@ -188,9 +213,14 @@ export default function TestModePanel({
       desc: "Chuyên sâu về Copy/Move Constructors, Shallow/Deep Copy, danh sách khởi tạo và các cơ chế Kế thừa.",
       count: 25,
       duration: "40 phút",
-      topics: ["Copy & Move Constructors", "Initializer List", "Name Hiding", "Kế thừa public/protected/private"],
+      topics: [
+        "Copy & Move Constructors",
+        "Initializer List",
+        "Name Hiding",
+        "Kế thừa public/protected/private",
+      ],
       color: "from-purple-500 to-indigo-600",
-      bgLight: "bg-purple-50/40 text-purple-700 border-purple-100"
+      bgLight: "bg-purple-50/40 text-purple-700 border-purple-100",
     },
     {
       id: 3,
@@ -198,9 +228,14 @@ export default function TestModePanel({
       desc: "Chinh phục Dynamic Binding, bảng ảo vtable, hàm ảo/thuần ảo, lớp trừu tượng và virtual destructor.",
       count: 25,
       duration: "40 phút",
-      topics: ["Cơ chế vtable & vptr", "Pure Virtual Functions", "Abstract Classes", "Bẫy virtual in constructor"],
+      topics: [
+        "Cơ chế vtable & vptr",
+        "Pure Virtual Functions",
+        "Abstract Classes",
+        "Bẫy virtual in constructor",
+      ],
       color: "from-emerald-500 to-teal-600",
-      bgLight: "bg-emerald-50/40 text-emerald-700 border-emerald-100"
+      bgLight: "bg-emerald-50/40 text-emerald-700 border-emerald-100",
     },
     {
       id: 4,
@@ -208,9 +243,14 @@ export default function TestModePanel({
       desc: "Tổng lực các bẫy Nạp chồng toán tử, Cơ chế Friend, Lập trình tổng quát Template và Ngoại lệ.",
       count: 25,
       duration: "40 phút",
-      topics: ["Toán tử cấm nạp chồng", "Tiền tố vs Hậu tố ++", "Friend class/function", "Stack Unwinding in Exceptions"],
+      topics: [
+        "Toán tử cấm nạp chồng",
+        "Tiền tố vs Hậu tố ++",
+        "Friend class/function",
+        "Stack Unwinding in Exceptions",
+      ],
       color: "from-rose-500 to-orange-600",
-      bgLight: "bg-rose-50/40 text-rose-700 border-rose-100"
+      bgLight: "bg-rose-50/40 text-rose-700 border-rose-100",
     },
     {
       id: 5,
@@ -218,9 +258,14 @@ export default function TestModePanel({
       desc: "Chuyên sâu về cấu trúc biến Tham chiếu, hàm inline tối ưu hóa, không gian tên Namespace và mutable.",
       count: 25,
       duration: "40 phút",
-      topics: ["Reference vs Pointer", "Implicit Inline functions", "Namespace Pollution", "mutable in const class"],
+      topics: [
+        "Reference vs Pointer",
+        "Implicit Inline functions",
+        "Namespace Pollution",
+        "mutable in const class",
+      ],
       color: "from-amber-500 to-orange-600",
-      bgLight: "bg-amber-50/40 text-amber-700 border-amber-100"
+      bgLight: "bg-amber-50/40 text-amber-700 border-amber-100",
     },
     {
       id: 6,
@@ -228,9 +273,14 @@ export default function TestModePanel({
       desc: "Lĩnh hội cơ chế Hàm hủy ảo bảo toàn RAM, override/final an toàn, Upcasting và Downcasting mạo hiểm.",
       count: 25,
       duration: "40 phút",
-      topics: ["Virtual Destructor", "Đa hình in Constructor", "dynamic_cast / static_cast", "Object Slicing danger"],
+      topics: [
+        "Virtual Destructor",
+        "Đa hình in Constructor",
+        "dynamic_cast / static_cast",
+        "Object Slicing danger",
+      ],
       color: "from-cyan-500 to-blue-600",
-      bgLight: "bg-cyan-50/40 text-cyan-700 border-cyan-100"
+      bgLight: "bg-cyan-50/40 text-cyan-700 border-cyan-100",
     },
     {
       id: 7,
@@ -238,9 +288,14 @@ export default function TestModePanel({
       desc: "Xử lý cặn kẽ Tiền/Hậu tố ++, toán tử cấm nạp chồng, Stack Unwinding và con trỏ độc quyền unique_ptr.",
       count: 25,
       duration: "40 phút",
-      topics: ["Toán tử cấm nạp chồng", "Tiền tố vs Hậu tố ++", "Stack Unwinding exceptions", "Smart Pointer RAII"],
+      topics: [
+        "Toán tử cấm nạp chồng",
+        "Tiền tố vs Hậu tố ++",
+        "Stack Unwinding exceptions",
+        "Smart Pointer RAII",
+      ],
       color: "from-pink-500 to-rose-600",
-      bgLight: "bg-pink-50/40 text-pink-700 border-pink-100"
+      bgLight: "bg-pink-50/40 text-pink-700 border-pink-100",
     },
     {
       id: 8,
@@ -248,16 +303,50 @@ export default function TestModePanel({
       desc: "Chinh phục nạp chồng operator(), lỗi chu kỳ tham chiếu chéo, Dangling Pointer và giải thuật lưu trữ map/set.",
       count: 25,
       duration: "40 phút",
-      topics: ["operator() (Functor)", "Circular Reference", "Dangling Pointer danger", "std::map (Red-Black Tree)"],
+      topics: [
+        "operator() (Functor)",
+        "Circular Reference",
+        "Dangling Pointer danger",
+        "std::map (Red-Black Tree)",
+      ],
       color: "from-teal-500 to-emerald-600",
-      bgLight: "bg-teal-50/40 text-teal-700 border-teal-100"
-    }
+      bgLight: "bg-teal-50/40 text-teal-700 border-teal-100",
+    },
+    {
+      id: 9,
+      title: "Đợt Thi 9: Lớp, Hàm Tạo & Hàm Hủy",
+      desc: "Kiểm tra sâu rộng kiến thức từ Slide lý thuyết: Cách dùng Camel Case, con trỏ this, hàm khởi dựng (Constructor), Copy Constructor sâu sắc và Hàm hủy (Destructor).",
+      count: 25,
+      duration: "40 phút",
+      topics: [
+        "Camel Case & Pascal Case",
+        "Con trỏ ngầm định 'this'",
+        "Deep Copy vs Shallow Copy",
+        "Quy tắc gọi Hàm Hủy / Delete",
+      ],
+      color: "from-blue-500 to-indigo-600",
+      bgLight: "bg-blue-50/40 text-blue-700 border-blue-100",
+    },
+    {
+      id: 10,
+      title: "Đợt Thi 10: Tĩnh, Bạn, Đa Hình & Generic",
+      desc: "Chinh phục bẫy static, hàm bạn friend độc lập, kế thừa đơn/đa, đa hình hàm ảo, nạp chồng toán tử, interface thuần ảo và khuôn mẫu Template.",
+      count: 25,
+      duration: "40 phút",
+      topics: [
+        "Thành viên static & friend",
+        "Khai báo Đa Kế Thừa C++",
+        "Nạp chồng toán tử nhập-xuất",
+        "Pure Virtual & Template T",
+      ],
+      color: "from-violet-500 to-fuchsia-600",
+      bgLight: "bg-violet-50/40 text-violet-700 border-violet-100",
+    },
   ];
 
   if (selectedBatch === null) {
     return (
       <div className="space-y-6">
-        
         {/* Intro HUD */}
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-2">
           <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -265,21 +354,27 @@ export default function TestModePanel({
             Hệ Thống Thi Thử Chia Đợt Học Kỳ
           </h2>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Ngân hàng 200 câu hỏi trắc nghiệm Đánh giá năng lực môn Lập trình Hướng đối tượng C++ đã được xây dựng và mã hoá thành <strong>8 Đợt thi chuyên đề bài bản</strong>. Mỗi đợt tương ứng với <strong>25 câu hỏi trắc nghiệm (Thời gian: 40 phút)</strong> được thiết kế theo đúng cấu trúc đề tốt nghiệp học trình đại học.
+            Ngân hàng 200 câu hỏi trắc nghiệm Đánh giá năng lực môn Lập trình
+            Hướng đối tượng C++ đã được xây dựng và mã hoá thành{" "}
+            <strong>8 Đợt thi chuyên đề bài bản</strong>. Mỗi đợt tương ứng với{" "}
+            <strong>25 câu hỏi trắc nghiệm (Thời gian: 40 phút)</strong> được
+            thiết kế theo đúng cấu trúc đề tốt nghiệp học trình đại học.
           </p>
         </div>
 
         {/* 8 Batches Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {batches.map((b) => (
-            <div 
-              key={b.id} 
+            <div
+              key={b.id}
               className="bg-white rounded-2xl border border-slate-150/80 shadow-xs hover:shadow-md transition duration-200 overflow-hidden flex flex-col justify-between"
             >
               <div className="p-6 space-y-4">
                 {/* Batch Header */}
                 <div className="flex justify-between items-start">
-                  <div className={`px-2.5 py-1 rounded-lg border text-xs font-mono font-bold ${b.bgLight}`}>
+                  <div
+                    className={`px-2.5 py-1 rounded-lg border text-xs font-mono font-bold ${b.bgLight}`}
+                  >
                     ĐỢT THI {b.id}
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
@@ -293,15 +388,22 @@ export default function TestModePanel({
                   <h3 className="text-sm font-bold text-slate-800 group-hover:text-sky-600 transition">
                     {b.title}
                   </h3>
-                  <p className="text-[11px] text-slate-400 leading-relaxed">{b.desc}</p>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    {b.desc}
+                  </p>
                 </div>
 
                 {/* Topics Covered Checklist */}
                 <div className="pt-2 border-t border-slate-50 space-y-1.5">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nội dung cốt lõi:</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Nội dung cốt lõi:
+                  </span>
                   <div className="grid grid-cols-2 gap-x-3 gap-y-1.5">
                     {b.topics.map((t, idx) => (
-                      <div key={idx} className="flex items-center gap-1.5 text-[10px] text-slate-500">
+                      <div
+                        key={idx}
+                        className="flex items-center gap-1.5 text-[10px] text-slate-500"
+                      >
                         <Check className="w-3 h-3 text-emerald-500 shrink-0" />
                         <span className="truncate">{t}</span>
                       </div>
@@ -335,9 +437,13 @@ export default function TestModePanel({
               <Flame className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-slate-800">Cần ôn tập nhanh gọn trong 15 phút?</h4>
+              <h4 className="text-sm font-bold text-slate-800">
+                Cần ôn tập nhanh gọn trong 15 phút?
+              </h4>
               <p className="text-[11px] text-slate-500 leading-relaxed max-w-lg">
-                Thử sức ngay với <strong>Đề Thi Thử Tổng Hợp 10 Câu</strong> ngẫu nhiên trích xuất từ 200 câu trong toàn bộ ngân hàng đề để kiểm định nhanh cấp độ đa hình và sửa nợ.
+                Thử sức ngay với <strong>Đề Thi Thử Tổng Hợp 10 Câu</strong>{" "}
+                ngẫu nhiên trích xuất từ 200 câu trong toàn bộ ngân hàng đề để
+                kiểm định nhanh cấp độ đa hình và sửa nợ.
               </p>
             </div>
           </div>
@@ -350,7 +456,6 @@ export default function TestModePanel({
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
-
       </div>
     );
   }
@@ -360,7 +465,6 @@ export default function TestModePanel({
 
   return (
     <div className="space-y-6">
-      
       {/* Test Bar HUD */}
       <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
@@ -373,13 +477,13 @@ export default function TestModePanel({
           </button>
           <div>
             <h3 className="text-sm font-bold text-slate-800">
-              {selectedBatch === 0 
-                ? "Thi Thử Tổng Hợp Ngẫu Nhiên" 
+              {selectedBatch === 0
+                ? "Thi Thử Tổng Hợp Ngẫu Nhiên"
                 : `Kỳ Thi Thử Đánh Giá LTHDT • Đợt ${selectedBatch}`}
             </h3>
             <p className="text-slate-400 text-xs">
-              {selectedBatch === 0 
-                ? "Khóa luyện nhanh 10 câu ngẫu nhiên kiểm soát trình độ." 
+              {selectedBatch === 0
+                ? "Khóa luyện nhanh 10 câu ngẫu nhiên kiểm soát trình độ."
                 : `Thực hiện đầy đủ ${totalQuestions} câu hỏi chuyên sâu đợt ${selectedBatch}.`}
             </p>
           </div>
@@ -387,11 +491,13 @@ export default function TestModePanel({
 
         {/* Timer & Submit Controls */}
         <div className="flex items-center gap-3">
-          <div className={`px-4 py-2 rounded-xl flex items-center gap-2 border font-mono font-bold text-sm ${
-            timeLeft < 180 
-              ? "bg-rose-50 text-rose-700 border-rose-100 animate-pulse" 
-              : "bg-slate-50 text-slate-700 border-slate-100"
-          }`}>
+          <div
+            className={`px-4 py-2 rounded-xl flex items-center gap-2 border font-mono font-bold text-sm ${
+              timeLeft < 180
+                ? "bg-rose-50 text-rose-700 border-rose-100 animate-pulse"
+                : "bg-slate-50 text-slate-700 border-slate-100"
+            }`}
+          >
             <Clock className="w-4 h-4" />
             {formatTime(timeLeft)}
           </div>
@@ -423,23 +529,33 @@ export default function TestModePanel({
         <div className="space-y-6">
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm text-center max-w-xl mx-auto space-y-4 animate-fade-in">
             <Award className="w-16 h-16 text-sky-600 mx-auto" />
-            <h2 className="text-xl font-bold text-slate-800">Kết Quả Bài Thi Đợt {selectedBatch || "Ngẫu Nhiên"}</h2>
-            
+            <h2 className="text-xl font-bold text-slate-800">
+              Kết Quả Bài Thi Đợt {selectedBatch || "Ngẫu Nhiên"}
+            </h2>
+
             <div className="flex justify-center gap-8 py-4">
               <div>
-                <div className="text-5xl font-black text-sky-600">{score}/{totalQuestions}</div>
-                <div className="text-xs text-slate-400 font-medium mt-1">Sổ câu trả lời đúng</div>
+                <div className="text-5xl font-black text-sky-600">
+                  {score}/{totalQuestions}
+                </div>
+                <div className="text-xs text-slate-400 font-medium mt-1">
+                  Sổ câu trả lời đúng
+                </div>
               </div>
               <div className="border-r border-slate-150" />
               <div>
-                <div className="text-5xl font-black text-slate-800">{Math.round((score/totalQuestions) * 100)}%</div>
-                <div className="text-xs text-slate-400 font-medium mt-1">Độ chính xác tương đương</div>
+                <div className="text-5xl font-black text-slate-800">
+                  {Math.round((score / totalQuestions) * 100)}%
+                </div>
+                <div className="text-xs text-slate-400 font-medium mt-1">
+                  Độ chính xác tương đương
+                </div>
               </div>
             </div>
 
             <p className="text-slate-500 text-xs leading-normal">
-              {score / totalQuestions >= 0.8 
-                ? "Xuất sắc! Bạn nắm cực kỳ hoàn hảo lượng lý thuyết và bẫy C++ OOP được đề xuất. Các lỗi sai đơn lẻ đã được thêm vào Sổ tay để tổng ôn." 
+              {score / totalQuestions >= 0.8
+                ? "Xuất sắc! Bạn nắm cực kỳ hoàn hảo lượng lý thuyết và bẫy C++ OOP được đề xuất. Các lỗi sai đơn lẻ đã được thêm vào Sổ tay để tổng ôn."
                 : "Cố gắng lên! Các câu sai đã tự động được đưa vào danh sách nợ câu sai. Bạn có thể thanh lý các lỗi sai này tại bất kỳ thời gian nào."}
             </p>
 
@@ -473,8 +589,8 @@ export default function TestModePanel({
               const correct = uAns === q.correctAnswer;
 
               return (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   className={`bg-white p-6 rounded-2xl border shadow-sm space-y-4 ${
                     correct ? "border-emerald-150" : "border-rose-150"
                   }`}
@@ -483,9 +599,11 @@ export default function TestModePanel({
                     <span className="px-2.5 py-0.5 bg-slate-50 text-slate-600 text-xs font-semibold rounded-md">
                       Câu {idx + 1} • {q.category}
                     </span>
-                    <span className={`text-xs font-semibold flex items-center gap-1.5 ${
-                      correct ? "text-emerald-600" : "text-rose-600"
-                    }`}>
+                    <span
+                      className={`text-xs font-semibold flex items-center gap-1.5 ${
+                        correct ? "text-emerald-600" : "text-rose-600"
+                      }`}
+                    >
                       {correct ? (
                         <>
                           <CheckCircle2 className="w-4 h-4" />
@@ -494,7 +612,8 @@ export default function TestModePanel({
                       ) : (
                         <>
                           <XCircle className="w-4 h-4" />
-                          Sai • Đã chọn {uAns || "Không trả lời"} (Đáp án đúng: {q.correctAnswer})
+                          Sai • Đã chọn {uAns || "Không trả lời"} (Đáp án đúng:{" "}
+                          {q.correctAnswer})
                         </>
                       )}
                     </span>
@@ -502,7 +621,9 @@ export default function TestModePanel({
 
                   {/* Question Text */}
                   <div>
-                    <h4 className="text-sm font-bold text-slate-800 leading-normal">{q.questionText}</h4>
+                    <h4 className="text-sm font-bold text-slate-800 leading-normal">
+                      {q.questionText}
+                    </h4>
                     {q.codeSnippet && <CppCodeBlock code={q.codeSnippet} />}
                   </div>
 
@@ -522,7 +643,6 @@ export default function TestModePanel({
       ) : (
         /* Interactive Live Test Form with Navigation Grid Sidebar */
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          
           {/* Main Question view */}
           {activeQuestion && (
             <div className="lg:col-span-3 bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-sm space-y-6">
@@ -538,10 +658,14 @@ export default function TestModePanel({
               {/* Question Statement */}
               <div className="space-y-4">
                 <h3 className="text-base font-bold text-slate-800 leading-normal flex gap-2">
-                  <span className="text-sky-600 font-mono text-lg font-bold">Q{currentIdx + 1}.</span>
+                  <span className="text-sky-600 font-mono text-lg font-bold">
+                    Q{currentIdx + 1}.
+                  </span>
                   {activeQuestion.questionText}
                 </h3>
-                {activeQuestion.codeSnippet && <CppCodeBlock code={activeQuestion.codeSnippet} />}
+                {activeQuestion.codeSnippet && (
+                  <CppCodeBlock code={activeQuestion.codeSnippet} />
+                )}
               </div>
 
               {/* Option Selection list */}
@@ -553,19 +677,23 @@ export default function TestModePanel({
                   return (
                     <button
                       key={option.key}
-                      onClick={() => handleSelectOption(activeQuestion.id, option.key)}
+                      onClick={() =>
+                        handleSelectOption(activeQuestion.id, option.key)
+                      }
                       id={`test-opt-btn-${option.key}`}
                       className={`group text-left p-4 rounded-xl border text-sm font-medium transition duration-150 flex items-center gap-4 cursor-pointer ${
-                        isSelected 
-                          ? "border-sky-500 bg-sky-50/20 text-sky-900 ring-1 ring-sky-500" 
+                        isSelected
+                          ? "border-sky-500 bg-sky-50/20 text-sky-900 ring-1 ring-sky-500"
                           : "border-slate-150 hover:border-slate-300 hover:bg-slate-50/50"
                       }`}
                     >
-                      <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm shrink-0 transition ${
-                        isSelected 
-                          ? "bg-sky-500 text-white" 
-                          : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
-                      }`}>
+                      <span
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center font-mono font-bold text-sm shrink-0 transition ${
+                          isSelected
+                            ? "bg-sky-500 text-white"
+                            : "bg-slate-100 text-slate-500 group-hover:bg-slate-200"
+                        }`}
+                      >
                         {option.key}
                       </span>
                       <span>{option.text}</span>
@@ -623,10 +751,12 @@ export default function TestModePanel({
 
                 let gridClass = "bg-slate-50 border-slate-100 text-slate-400";
                 if (isAnswered) {
-                  gridClass = "bg-sky-500 border-sky-505 text-white shadow-xs font-bold";
+                  gridClass =
+                    "bg-sky-500 border-sky-505 text-white shadow-xs font-bold";
                 }
                 if (isCurrent) {
-                  gridClass = "bg-slate-900 border-slate-900 text-white ring-2 ring-sky-305 ring-offset-2 font-blackScale";
+                  gridClass =
+                    "bg-slate-900 border-slate-900 text-white ring-2 ring-sky-305 ring-offset-2 font-blackScale";
                 }
 
                 return (
@@ -659,10 +789,12 @@ export default function TestModePanel({
 
             <div className="bg-amber-50 rounded-xl p-3 border border-amber-100 text-[10px] text-amber-800 leading-normal flex gap-1.5">
               <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <span>Gợi ý: Nhấp trực tiếp vào bất kỳ ô số nào để nhảy nhanh tới câu hỏi tương ứng phục vụ kiểm duyệt kết quả!</span>
+              <span>
+                Gợi ý: Nhấp trực tiếp vào bất kỳ ô số nào để nhảy nhanh tới câu
+                hỏi tương ứng phục vụ kiểm duyệt kết quả!
+              </span>
             </div>
           </div>
-
         </div>
       )}
     </div>
