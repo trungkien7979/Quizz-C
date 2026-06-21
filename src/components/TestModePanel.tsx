@@ -40,7 +40,7 @@ export default function TestModePanel({
   onGoBack,
 }: TestModePanelProps) {
   // Test selection states
-  const [selectedBatch, setSelectedBatch] = useState<number | null>(null); // null = landing, 1..4 = Batch 1..4, 0 = Random 10
+  const [selectedBatch, setSelectedBatch] = useState<number | null>(null); // null = landing, 1..10 = Batch 1..10, 0 = Random 10
 
   // Active test states
   const [testQuestions, setTestQuestions] = useState<Question[]>([]);
@@ -88,7 +88,7 @@ export default function TestModePanel({
     let selected: Question[] = [];
     let timeDuration = 2400; // 40 minutes default
 
-    if (batchNo >= 1 && batchNo <= 8) {
+    if (batchNo >= 1 && batchNo <= 10) {
       selected = questionPool.slice((batchNo - 1) * 25, batchNo * 25);
     } else {
       // Random 10 questions mock quiz
@@ -190,7 +190,7 @@ export default function TestModePanel({
     setSelectedBatch(null);
   };
 
-  // 8 Batches Definition for landing display
+  // 10 Batches Definition for landing display
   const batches = [
     {
       id: 1,
@@ -354,15 +354,15 @@ export default function TestModePanel({
             Hệ Thống Thi Thử Chia Đợt Học Kỳ
           </h2>
           <p className="text-xs text-slate-500 leading-relaxed">
-            Ngân hàng 200 câu hỏi trắc nghiệm Đánh giá năng lực môn Lập trình
+            Ngân hàng 250 câu hỏi trắc nghiệm Đánh giá năng lực môn Lập trình
             Hướng đối tượng C++ đã được xây dựng và mã hoá thành{" "}
-            <strong>8 Đợt thi chuyên đề bài bản</strong>. Mỗi đợt tương ứng với{" "}
+            <strong>10 Đợt thi chuyên đề bài bản</strong>. Mỗi đợt tương ứng với{" "}
             <strong>25 câu hỏi trắc nghiệm (Thời gian: 40 phút)</strong> được
             thiết kế theo đúng cấu trúc đề tốt nghiệp học trình đại học.
           </p>
         </div>
 
-        {/* 8 Batches Grid */}
+        {/* 10 Batches Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {batches.map((b) => (
             <div
@@ -442,7 +442,7 @@ export default function TestModePanel({
               </h4>
               <p className="text-[11px] text-slate-500 leading-relaxed max-w-lg">
                 Thử sức ngay với <strong>Đề Thi Thử Tổng Hợp 10 Câu</strong>{" "}
-                ngẫu nhiên trích xuất từ 200 câu trong toàn bộ ngân hàng đề để
+                ngẫu nhiên trích xuất từ 250 câu trong toàn bộ ngân hàng đề để
                 kiểm định nhanh cấp độ đa hình và sửa nợ.
               </p>
             </div>

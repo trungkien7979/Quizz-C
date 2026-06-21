@@ -15,7 +15,7 @@ import { BATCH8_QUESTIONS } from "./questions_batch8";
 import { BATCH9_QUESTIONS } from "./questions_batch9";
 import { BATCH10_QUESTIONS } from "./questions_batch10";
 
-// Consolidate all batches into a single pool of 200 questions
+// Consolidate all batches into a single pool of 250 questions
 export const QUESTION_POOL: Question[] = [
   ...BATCH1_QUESTIONS,
   ...BATCH2_QUESTIONS,
